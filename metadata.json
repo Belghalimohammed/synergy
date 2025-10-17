@@ -1,0 +1,7 @@
+{
+  "name": "Copy of Synergy AI Dashboard (stable)",
+  "description": "An AI-powered personal assistant with a customizable widget-based dashboard. Manage tasks, events, and notes with multiple views. Features text-to-speech for AI chat and notes, a Pomodoro timer, and more to keep you organized and productive.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}

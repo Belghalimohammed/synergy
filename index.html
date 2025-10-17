@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synergy AI Dashboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <script type="importmap">
+    {
+      "imports": {
+        "react": "https://aistudiocdn.com/react@^19.2.0",
+        "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+        "react/": "https://aistudiocdn.com/react@^19.2.0/",
+        "@google/genai": "https://aistudiocdn.com/@google/genai@^1.25.0",
+        "react-markdown": "https://aistudiocdn.com/react-markdown@^9.0.1",
+        "remark-gfm": "https://aistudiocdn.com/remark-gfm@^4.0.0",
+        "jspdf": "https://aistudiocdn.com/jspdf@^2.5.1",
+        "html2canvas": "https://aistudiocdn.com/html2canvas@^1.4.1",
+        "react-force-graph-2d": "https://aistudiocdn.com/react-force-graph-2d@^1.26.1",
+        "three": "https://aistudiocdn.com/three@^0.168.0"
+      }
+    }
+    </script>
+    <script type="module" src="/index.tsx"></script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+      
+      :root {
+        font-family: 'Inter', sans-serif;
+        
+        /* Light Mode Colors */
+        --bg-primary: #f8fafc; /* slate-50 */
+        --bg-secondary: #ffffff; /* white */
+        --bg-tertiary: #f1f5f9; /* slate-100 */
+        --bg-quaternary: #e2e8f0; /* slate-200 */
+        --text-primary: #0f172a; /* slate-900 */
+        --text-secondary: #64748b; /* slate-500 */
+        --text-muted: #94a3b8; /* slate-400 */
+        --border-color: #e2e8f0; /* slate-200 */
+        --input-bg: #ffffff; /* white */
+
+        /* Default Theme: Sky */
+        --color-primary-100: #e0f2fe; --color-primary-200: #bae6fd; --color-primary-300: #7dd3fc; --color-primary-400: #38bdf8; --color-primary-500: #0ea5e9; --color-primary-600: #0284c7;
+        --color-primary-500-hsl: 204 90% 55%;
+
+        /* Corner Radius Variables */
+        --radius-sm: 0.375rem; --radius-md: 0.75rem; --radius-lg: 1.5rem;
+        --border-radius: var(--radius-md);
+
+        /* Prose Light */
+        --tw-prose-body: var(--text-primary);
+        --tw-prose-headings: var(--text-primary);
+        --tw-prose-lead: var(--text-secondary);
+        --tw-prose-links: var(--color-primary-600);
+        --tw-prose-bold: var(--text-primary);
+        --tw-prose-counters: var(--text-secondary);
+        --tw-prose-bullets: var(--text-muted);
+        --tw-prose-hr: var(--border-color);
+        --tw-prose-quotes: var(--text-primary);
+        --tw-prose-quote-borders: var(--border-color);
+        --tw-prose-captions: var(--text-secondary);
+        --tw-prose-code: var(--color-primary-600);
+        --tw-prose-pre-code: var(--text-secondary);
+        --tw-prose-pre-bg: var(--bg-tertiary);
+        --tw-prose-th-borders: var(--border-color);
+        --tw-prose-td-borders: var(--border-color);
+      }
+      
+      .dark {
+        /* Dark Mode Colors */
+        --bg-primary: #020617; /* slate-950 */
+        --bg-secondary: #0f172a; /* slate-900 */
+        --bg-tertiary: #1e293b; /* slate-800 */
+        --bg-quaternary: #334155; /* slate-700 */
+        --text-primary: #e2e8f0; /* slate-200 */
+        --text-secondary: #94a3b8; /* slate-400 */
+        --text-muted: #64748b; /* slate-500 */
+        --border-color: #334155; /* slate-700 */
+        --input-bg: #1e293b; /* slate-800 */
+
+        /* Prose Dark */
+        --tw-prose-body: var(--text-primary);
+        --tw-prose-headings: #ffffff;
+        --tw-prose-lead: var(--text-secondary);
+        --tw-prose-links: var(--color-primary-400);
+        --tw-prose-bold: #ffffff;
+        --tw-prose-counters: var(--text-secondary);
+        --tw-prose-bullets: var(--text-muted);
+        --tw-prose-hr: var(--border-color);
+        --tw-prose-quotes: var(--text-primary);
+        --tw-prose-quote-borders: var(--border-color);
+        --tw-prose-captions: var(--text-secondary);
+        --tw-prose-code: var(--color-primary-300);
+        --tw-prose-pre-code: var(--text-primary);
+        --tw-prose-pre-bg: var(--bg-tertiary);
+        --tw-prose-th-borders: var(--border-color);
+        --tw-prose-td-borders: var(--border-color);
+      }
+      
+      .theme-rose { --color-primary-100: #ffe4e6; --color-primary-200: #fecdd3; --color-primary-300: #fda4af; --color-primary-400: #fb7185; --color-primary-500: #f43f5e; --color-primary-600: #e11d48; --color-primary-500-hsl: 347 89% 61%; }
+      .theme-emerald { --color-primary-100: #d1fae5; --color-primary-200: #a7f3d0; --color-primary-300: #6ee7b7; --color-primary-400: #34d399; --color-primary-500: #10b981; --color-primary-600: #059669; --color-primary-500-hsl: 158 81% 42%; }
+      .theme-indigo { --color-primary-100: #e0e7ff; --color-primary-200: #c7d2fe; --color-primary-300: #a5b4fc; --color-primary-400: #818cf8; --color-primary-500: #6366f1; --color-primary-600: #4f46e5; --color-primary-500-hsl: 243 85% 66%; }
+      
+      .radius-sm { --border-radius: var(--radius-sm); }
+      .radius-md { --border-radius: var(--radius-md); }
+      .radius-lg { --border-radius: var(--radius-lg); }
+
+      .font-size-sm { font-size: 14px; }
+      .font-size-md { font-size: 16px; }
+      .font-size-lg { font-size: 18px; }
+
+      html, body, #root { height: 100%; }
+      body {
+        margin: 0;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background-color: var(--bg-primary);
+        color: var(--text-primary);
+      }
+
+      /* Modern scrollbar styling */
+      ::-webkit-scrollbar { width: 10px; height: 10px; }
+      ::-webkit-scrollbar-track { background: var(--bg-secondary); }
+      ::-webkit-scrollbar-thumb { background: var(--bg-quaternary); border-radius: 5px; border: 2px solid var(--bg-secondary); }
+      .dark ::-webkit-scrollbar-thumb { background: var(--bg-quaternary); border-color: var(--bg-secondary); }
+      ::-webkit-scrollbar-thumb:hover { background: var(--border-color); }
+      .dark ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    </style>
+</head>
+<body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+</body>
+</html>
